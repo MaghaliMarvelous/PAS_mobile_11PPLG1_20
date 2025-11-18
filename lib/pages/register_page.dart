@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pas1_mobile_11pplg1_20/controller/register_controller.dart';
+import '../controller/register_controller.dart';
 
 class RegisterPage extends StatelessWidget {
   const RegisterPage({super.key});
@@ -8,48 +8,115 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final RegisterController controller = Get.put(RegisterController());
-    final TextEditingController usernameController = TextEditingController();
-    final TextEditingController passwordController = TextEditingController();
-    final TextEditingController fullNameController = TextEditingController();
-    final TextEditingController emailController = TextEditingController();
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Register'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: usernameController,
-              decoration: const InputDecoration(labelText: 'Username'),
+      backgroundColor: Colors.grey[100],
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+
+                Icon(Icons.person_add,
+                    size: 80, color: Theme.of(context).primaryColor),
+                const SizedBox(height: 16),
+                const Text(
+                  "Create Account",
+                  style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87),
+                ),
+                const SizedBox(height: 32),
+
+                TextField(
+                  controller: controller.usernameController,
+                  decoration: InputDecoration(
+                    labelText: 'Username',
+                    prefixIcon: const Icon(Icons.account_circle),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                TextField(
+                  controller: controller.passwordController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    prefixIcon: const Icon(Icons.lock),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                TextField(
+                  controller: controller.fullNameController,
+                  decoration: InputDecoration(
+                    labelText: 'Full Name',
+                    prefixIcon: const Icon(Icons.badge),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                TextField(
+                  controller: controller.emailController,
+                  decoration: InputDecoration(
+                    labelText: 'Email',
+                    prefixIcon: const Icon(Icons.email),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 24),
+
+                Obx(() => controller.isLoading.value
+                    ? const CircularProgressIndicator()
+                    : SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          onPressed: controller.register,
+                          child: const Text(
+                            'Register',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ),
+                      )),
+                const SizedBox(height: 16),
+
+                TextButton(
+                  onPressed: () => Get.toNamed('/login'),
+                  child: const Text("Sudah punya akun? Login"),
+                ),
+              ],
             ),
-            TextField(
-              controller: passwordController,
-              decoration: const InputDecoration(labelText: 'Password'),
-              obscureText: true,
-            ),
-            const SizedBox(height: 20),
-            Obx(() {
-              return controller.isLoading.value
-                  ? const CircularProgressIndicator()
-                  : ElevatedButton(
-                      onPressed: () {
-                        controller.register(
-                          usernameController.text,
-                          passwordController.text,
-                          fullNameController.text,
-                          emailController.text,
-                        );
-                      },
-                      child: const Text('Register'),
-                    );
-            }),
-          ],
+          ),
         ),
       ),
     );
   }
-
 }

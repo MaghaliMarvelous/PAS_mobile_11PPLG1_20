@@ -1,5 +1,5 @@
 class ProductModel {
-  final String key; // id or name as unique key
+  final String key; 
   final String? name;
   final double? price;
   final Map<String, dynamic> raw;

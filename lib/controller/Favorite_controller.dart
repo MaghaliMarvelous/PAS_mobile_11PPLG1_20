@@ -13,33 +13,60 @@ class FavoritesController extends GetxController {
 
   Future<void> _loadFromDb() async {
     final rows = await _db.getFavorites();
-    favorites.assignAll(rows);
+    favorites.assignAll(rows.map((p) => {
+      'id': (p['id'] ?? p['id_str'] ?? p['key']).toString(),
+      'title': p['title'] ?? p['name'],
+      'price': p['price'],
+      'image': p['image'],
+    }));
   }
 
-  dynamic _keyOf(Map<String, dynamic> product) => (product['id'] ?? product['name']).toString();
+  String _keyOf(Map<String, dynamic> product) {
+    final id = product['id'];
+    return id?.toString() ?? '';
+  }
+
+  bool contains(dynamic key) {
+    final k = key.toString();
+    return favorites.any((p) => _keyOf(p) == k);
+  }
 
   Future<void> add(Map<String, dynamic> product) async {
     final key = _keyOf(product);
-    if (!contains(key)) {
-      await _db.insertFavorite(key, product, name: product['name']?.toString(), price: product['price'] != null ? double.tryParse(product['price'].toString()) : null);
-      favorites.add(product);
-    }
+    if (key.isEmpty || contains(key)) return;
+
+    final normalized = {
+      'id': key,
+      'title': product['title'] ?? product['name'],
+      'price': product['price'],
+      'image': product['image'],
+    };
+
+    favorites.add(normalized);
+
+    await _db.insertFavorite(
+      key,
+      normalized,
+      name: normalized['title']?.toString(),
+      price: normalized['price'] != null
+          ? double.tryParse(normalized['price'].toString())
+          : null,
+    );
   }
 
   Future<void> removeByKey(dynamic key) async {
     final k = key.toString();
-    await _db.deleteFavorite(k);
     favorites.removeWhere((p) => _keyOf(p) == k);
+    await _db.deleteFavorite(k);
   }
 
   Future<void> toggle(Map<String, dynamic> product) async {
     final key = _keyOf(product);
+    if (key.isEmpty) return;
     if (contains(key)) {
       await removeByKey(key);
     } else {
       await add(product);
     }
   }
-
-  bool contains(dynamic key) => favorites.any((p) => _keyOf(p) == key);
 }
