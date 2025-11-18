@@ -10,13 +10,12 @@ class SplashscreenController extends GetxController {
 
   Future<void> checkLoginStatus() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.reload();
 
     final isLoggedIn = prefs.getBool("isLoggedIn") ?? false;
     final token = prefs.getString("token");
 
     if (isLoggedIn && token != null && token.isNotEmpty) {
-      Get.offAllNamed("/productDetail");
+      Get.offAllNamed("/navbar");
     } else {
       Get.offAllNamed("/login");
     }

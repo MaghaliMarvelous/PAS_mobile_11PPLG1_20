@@ -1,77 +1,76 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '../controller/login_controller.dart';
 
 class ProfilePage extends StatelessWidget {
-  final String name;
-  final String email;
-
-  const ProfilePage({
-    super.key,
-    this.name = 'Maghali Arka Nugraha',
-    this.email = 'sentinel@gmail.com',
-  });
+  const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final loginCtrl = Get.put(LoginController());
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Profil')),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
+      backgroundColor: Colors.grey[100],
+      appBar: AppBar(
+        title: const Text("Profile"),
+        centerTitle: true,
+      ),
+      body: Center( // 👈 ini memastikan semua konten di tengah layar
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min, // supaya konten pas di tengah
+          crossAxisAlignment: CrossAxisAlignment.center, // horizontal center
           children: [
-            const SizedBox(height: 8),
-            CircleAvatar(
-              radius: 48,
-              backgroundColor: Theme.of(context).primaryColor,
-              child: Text(
-                _initials(name),
-                style: const TextStyle(fontSize: 28, color: Colors.white),
+            // Profile photo
+            const CircleAvatar(
+              radius: 50,
+              backgroundImage: NetworkImage(
+                "https://i.pinimg.com/originals/87/ea/89/87ea8952891e51553d55d90dc649bbf3.gif",
               ),
             ),
             const SizedBox(height: 16),
-            Text(
-              name,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              email,
-              style: const TextStyle(fontSize: 16, color: Colors.grey),
-            ),
-            const SizedBox(height: 24),
-            Card(
-              child: ListTile(
-                leading: const Icon(Icons.person),
-                title: const Text('Nama'),
-                subtitle: Text(name),
+
+            // Username
+            const Text(
+              "Blue",
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
               ),
+              textAlign: TextAlign.center,
             ),
-            Card(
-              child: ListTile(
-                leading: const Icon(Icons.email),
-                title: const Text('Email'),
-                subtitle: Text(email),
+
+            // Email
+            const Text(
+              "blue@example.com",
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey,
               ),
+              textAlign: TextAlign.center,
             ),
-            const Spacer(),
+
+            const SizedBox(height: 32),
+
+            // Logout button
             ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              icon: const Icon(Icons.logout),
+              label: const Text(
+                "Logout",
+                style: TextStyle(fontSize: 16),
+              ),
               onPressed: () {
-                // contoh: navigasi ke halaman edit atau aksi lain
+                loginCtrl.logout();
               },
-              icon: const Icon(Icons.edit),
-              label: const Text('Edit Profil'),
             ),
-            const SizedBox(height: 8),
           ],
         ),
       ),
     );
-  }
-
-  static String _initials(String fullName) {
-    final parts = fullName.trim().split(RegExp(r'\s+'));
-    if (parts.isEmpty) return '?';
-    if (parts.length == 1) return parts.first.substring(0, 1).toUpperCase();
-    return (parts.first[0] + parts.last[0]).toUpperCase();
   }
 }
