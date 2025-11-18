@@ -15,10 +15,10 @@ class ProfilePage extends StatelessWidget {
         title: const Text("Profile"),
         centerTitle: true,
       ),
-      body: Center( // 👈 ini memastikan semua konten di tengah layar
+      body: Center( 
         child: Column(
-          mainAxisSize: MainAxisSize.min, // supaya konten pas di tengah
-          crossAxisAlignment: CrossAxisAlignment.center, // horizontal center
+          mainAxisSize: MainAxisSize.min, 
+          crossAxisAlignment: CrossAxisAlignment.center, 
           children: [
             // Profile photo
             const CircleAvatar(
@@ -51,7 +51,7 @@ class ProfilePage extends StatelessWidget {
 
             const SizedBox(height: 32),
 
-            // Logout button
+
             ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
